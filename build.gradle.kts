@@ -1,3 +1,5 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
     // Apply the Java Gradle Plugin Development plugin
     `java-gradle-plugin`
@@ -7,10 +9,13 @@ plugins {
 
     // Apply the Plugin Publishing Plugin to publish plugins to the Gradle Plugins Portal
     id("com.gradle.plugin-publish") version "0.20.0"
+
+    `publishing`
+    `maven-publish`
 }
 
 group = "io.github.krakowski"
-version = "0.5.0"
+version = "0.5.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -61,6 +66,17 @@ pluginBundle {
     website = "https://github.com/krakowski/gradle-jextract"
     vcsUrl = "https://github.com/krakowski/gradle-jextract.git"
     tags = listOf("native", "panama", "jextract")
+}
+
+publishing {
+    repositories {
+        publications {
+            create<MavenPublication>("maven") {
+                from(components["java"])
+            }
+        }
+        mavenLocal()
+    }
 }
 
 tasks.withType<Wrapper> {
